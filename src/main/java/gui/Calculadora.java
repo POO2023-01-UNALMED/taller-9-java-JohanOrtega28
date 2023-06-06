@@ -8,12 +8,12 @@ import javafx.stage.Stage;
 public class Calculadora extends Application  {
 	
 	public static void main(String args[]){ 
-	      lanch (args); 
+	      launch (args); 
 	} 
 	
 	@Override
 	public void start(Stage window) throws Exception {
-		Vbox vb = new VBox();
+		VBox vb = new VBox();
 		window.setTitle("Calculadora");
 		
 		vb.getChildren().add(new Calculator());
