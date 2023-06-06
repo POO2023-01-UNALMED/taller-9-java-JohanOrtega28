@@ -1,7 +1,5 @@
 package gui;
 
-import javax.swing.plaf.basic.ButtonActionListener;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -19,9 +17,6 @@ public class Calculator extends VBox implements EventHandler<ActionEvent>{
 	String number1 = "";
 	String number2 = "";
 	String operator;
-	String chain = "";
-	String numeros = "0123456789";
-	String operadores = "+-*/";
 	Text displayText;
 	
 	public Calculator(){
@@ -79,7 +74,7 @@ public class Calculator extends VBox implements EventHandler<ActionEvent>{
 		b6.setPrefWidth(50);
 		b6.setOnAction(this);
 		
-		Btton mul = new Button("*");
+		Button mul = new Button("*");
 		gd.add(mul, 3, 1);
 		mul.setPrefWidth(50);
 		mul.setOnAction(this);
@@ -110,7 +105,7 @@ public class Calculator extends VBox implements EventHandler<ActionEvent>{
 		b0.setOnAction(this);
 		
 		Button plus = new Button("+");
-		gd.add(plus, 3, 3);
+		gd.add(plus, 2, 3);
 		plus.setPrefWidth(50);
 		plus.setOnAction(this);
 		
@@ -132,50 +127,43 @@ public class Calculator extends VBox implements EventHandler<ActionEvent>{
 		
 		Button b = (Button) event.getSource();
 		String value = b.getText();
-		
-		if (this.numeros.contains(value)){
-			if (this.operator == null){
-				this.number1 += value;
-				this.chain += number1;
-				displayText.setText(number1);
-			}else{
-				this.number2 += value;
-				this.chain += this.operator + this.number2;
-				displayText.setText(this.chain);
-			} else if (this.operadores.contains(value)){
-				operator = value;
-				displayText.setText(this.number1 + operator);
-			}else if (value.equals("=")) {
-				if (this.number1.length()!=0 && this.number2.length()!=0 && operator != null) {
-					double resultado = calcular();
-					displayText.setText(Double.toString(resultado));
-				}
-			}else if (value.equals("C")) {
-				this.number1 = "";
-				this.number2 = "";
-				this.operator = null;
-				this.chain = "";
+		if(displayText.getText().equals("/") ||displayText.getText().equals("*") || displayText.getText().equals("+") || displayText.getText().equals("-") || displayText.getText().equals("Error: Divide by zero")){
+			displayText.setText("");
+		}
+		if(value.equals("/") || value.equals("*") || value.equals("-") || value.equals("+")){
+			number1 = displayText.getText();
+			operator = value;
+			displayText.setText(value);
+		}else if(!value.equals("=")){
+			if(value.equals("C")){
 				displayText.setText("");
+				number1 = "";
+				number2 = "";
+			}else{
+				displayText.setText(displayText.getText() + value);
 			}
-
-		}
-		public double calcular(){
-			double numero1 = Double.parseDouble(this.number1);
-			double numero2 = Double.parseDouble(this.number2);
-			double resultado = 0;
-
-			if (this.operator.equals("+")){
-				resultado = numero1 + numero2;
-			} else if (operator.equals("-")){
-				resultado = numero1 - numero2;
-			} else if (operator.equals("*")){
-				resultado = numero1 * numero2;
-			} else if (operator.equals("/")){
-				resultado = numero1 / numero2;
+		}else{
+			number2 = displayText.getText();
+			if(operator.equals("/")){
+				if(number1.equals("0")){
+					displayText.setText("Error: Divide by zero");
+					number1 = "";
+					number2 = "";
+				}else{
+					displayText.setText((Double.parseDouble(number1)/Double.parseDouble(number2))+"");
+				}
+			}else if(operator.equals("*")){
+				displayText.setText((Double.parseDouble(number1)* Double.parseDouble(number2))+"");
+			}else if(operator.equals("+")){
+				displayText.setText((Double.parseDouble(number1)+Double.parseDouble(number2))+"");
+			}else if(operator.equals("-")){
+				displayText.setText((Double.parseDouble(number1)-Double.parseDouble(number2))+"");
 			}
-			return resultado;
-
+			number1 = "";
+			number2 = "";
 		}
+		
+	}
 	
 
 }
